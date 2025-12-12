@@ -1,0 +1,160 @@
+/* VERTA HUD Styles - Minimalist geometric theme */
+
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  font-family: 'Courier New', monospace;
+  color: #00ffff;
+  z-index: 100;
+}
+
+/* Top-left: Level and XP */
+.hud-top-left {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hud-level {
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.hud-xp-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hud-xp-label {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.hud-xp-bar {
+  width: 150px;
+  height: 6px;
+  background: rgba(0, 255, 255, 0.2);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ffff, #00cccc);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+  transition: width 0.3s ease-out;
+}
+
+/* Top-right: Stats */
+.hud-top-right {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: right;
+}
+
+.hud-stat {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.hud-stat-value {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Bottom-left: Health */
+.hud-bottom-left {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hud-health-label {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.hud-health-bar {
+  width: 200px;
+  height: 12px;
+  background: rgba(255, 50, 100, 0.2);
+  border: 1px solid rgba(255, 50, 100, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-health-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff3366, #ff5588);
+  box-shadow: 0 0 8px rgba(255, 50, 100, 0.6);
+  transition: width 0.2s ease-out;
+}
+
+.hud-health-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  color: #ffffff;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Center: Level up notification */
+.hud-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.hud-level-up {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffff00;
+  text-shadow: 0 0 20px rgba(255, 255, 0, 0.8), 0 0 40px rgba(255, 255, 0, 0.4);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  pointer-events: none;
+}
+
+.hud-level-up.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hud-level-up-stats {
+  font-size: 14px;
+  color: #00ffff;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
+/* Wave indicator */
+.hud-wave {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  opacity: 0.6;
+}
