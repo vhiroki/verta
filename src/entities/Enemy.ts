@@ -15,11 +15,15 @@ export class Enemy {
   private targetPosition: THREE.Vector3 | null = null;
   private edgeLines: THREE.LineSegments;
   
+  // Health system
+  public maxHealth: number;
+  public currentHealth: number;
+  
   // Wanderer behavior
   private wanderTimer: number = 0;
   private wanderDirection: THREE.Vector3 = new THREE.Vector3();
 
-  constructor(type: EnemyType = 'chaser', position: THREE.Vector3) {
+  constructor(type: EnemyType = 'chaser', position: THREE.Vector3, wave: number = 1) {
     this.type = type;
     
     // Different geometry and color based on type
@@ -30,11 +34,16 @@ export class Enemy {
       geometry = new THREE.TetrahedronGeometry(0.6);
       color = 0xff3366; // Red-pink for aggressive chasers
       this.speed = 3;
+      // Chasers have lower health (1 hit at wave 1, scales up)
+      this.maxHealth = 20 + (wave - 1) * 15;
     } else {
       geometry = new THREE.BoxGeometry(0.7, 0.7, 0.7);
       color = 0xff9900; // Orange for wanderers
       this.speed = 2;
+      // Wanderers are tougher (2-3 hits at wave 1, scales up)
+      this.maxHealth = 50 + (wave - 1) * 25;
     }
+    this.currentHealth = this.maxHealth;
 
     const material = new THREE.MeshStandardMaterial({
       color: color,

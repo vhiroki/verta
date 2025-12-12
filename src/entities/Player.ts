@@ -12,6 +12,12 @@ export class Player {
   private readonly baseSpeed: number = 8;
   private speedMultiplier: number = 1.0;
   private inputManager: InputManager;
+  private material: THREE.MeshStandardMaterial;
+
+  // Damage flash effect
+  private isFlashing: boolean = false;
+  private flashTimer: number = 0;
+  private readonly flashDuration: number = 0.15;
 
   // Vectors for converting screen-relative input to world movement
   // For isometric camera at 45°, we rotate input by 45° to align with world axes
@@ -25,14 +31,14 @@ export class Player {
     const geometry = new THREE.OctahedronGeometry(0.8);
     
     // Emissive cyan material for glow effect
-    const material = new THREE.MeshStandardMaterial({
+    this.material = new THREE.MeshStandardMaterial({
       color: 0x00ffff,
       emissive: 0x00ffff,
       emissiveIntensity: 0.6,
       flatShading: true,
     });
 
-    this.mesh = new THREE.Mesh(geometry, material);
+    this.mesh = new THREE.Mesh(geometry, this.material);
     this.mesh.position.set(0, 0.8, 0); // Slightly above ground
     this.mesh.castShadow = true;
 
@@ -80,6 +86,30 @@ export class Player {
     // Add subtle rotation based on movement for visual feedback
     this.mesh.rotation.y += deltaTime * 2;
     this.mesh.rotation.x = Math.sin(Date.now() * 0.003) * 0.1;
+
+    // Update damage flash effect
+    if (this.isFlashing) {
+      this.flashTimer -= deltaTime;
+      if (this.flashTimer <= 0) {
+        this.isFlashing = false;
+        // Restore original color
+        this.material.color.setHex(0x00ffff);
+        this.material.emissive.setHex(0x00ffff);
+        this.material.emissiveIntensity = 0.6;
+      }
+    }
+  }
+
+  /**
+   * Flash the player red when taking damage
+   */
+  public flashDamage(): void {
+    this.isFlashing = true;
+    this.flashTimer = this.flashDuration;
+    // Flash red/white
+    this.material.color.setHex(0xff3333);
+    this.material.emissive.setHex(0xff0000);
+    this.material.emissiveIntensity = 1.5;
   }
 
   /**

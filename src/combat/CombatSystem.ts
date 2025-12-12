@@ -104,7 +104,7 @@ export class CombatSystem {
       if (!enemy.isAlive) continue;
       
       const distance = playerPosition.distanceTo(enemy.position);
-      if (distance < playerRadius + 0.6) { // Enemy radius ~0.6
+      if (distance < playerRadius + 0.5) { // Enemy radius
         return true;
       }
     }
@@ -112,9 +112,15 @@ export class CombatSystem {
   }
 
   private applyDamage(enemy: Enemy, damage: number): boolean {
-    // For now, enemies die in one hit. Future: add health system
-    enemy.isAlive = false;
-    return true;
+    enemy.currentHealth -= damage;
+    
+    if (enemy.currentHealth <= 0) {
+      enemy.currentHealth = 0;
+      enemy.isAlive = false;
+      return true; // Enemy died
+    }
+    
+    return false; // Enemy survived
   }
 
   private flashEnemy(enemy: Enemy): void {

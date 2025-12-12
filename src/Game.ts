@@ -34,6 +34,7 @@ export class Game {
   private hud: HUD;
   private progressionSystem: ProgressionSystem;
   private currentWave: number = 1;
+  private isGameOver: boolean = false;
 
   constructor(container: HTMLElement) {
     // Create scene
@@ -83,10 +84,20 @@ export class Game {
 
     // Handle window resize
     window.addEventListener('resize', this.onResize.bind(this));
+    
+    // Handle restart on space key
+    window.addEventListener('keydown', this.onKeyDown.bind(this));
+  }
+
+  private onKeyDown(event: KeyboardEvent): void {
+    if (event.code === 'Space' && this.isGameOver) {
+      event.preventDefault();
+      this.restart();
+    }
   }
 
   private spawnEnemyWave(count: number): void {
-    const newEnemies = this.enemySpawner.spawnWave(count, this.player.position);
+    const newEnemies = this.enemySpawner.spawnWave(count, this.player.position, this.currentWave);
     newEnemies.forEach(enemy => {
       this.enemies.push(enemy);
       this.scene.add(enemy.mesh);
@@ -146,9 +157,17 @@ export class Game {
 
     // Check for player collision with enemies
     if (this.combatSystem.checkPlayerCollision(this.player.position, this.enemies)) {
-      // Apply contact damage (10 damage per second)
-      const contactDamage = 10 * deltaTime;
-      this.progressionSystem.applyDamage(this.playerStats, contactDamage);
+      // Apply contact damage (25 damage per second)
+      const contactDamage = 25 * deltaTime;
+      const playerDied = this.progressionSystem.applyDamage(this.playerStats, contactDamage);
+      // Flash player red
+      this.player.flashDamage();
+      
+      // Check if player died
+      if (playerDied) {
+        this.gameOver();
+        return;
+      }
     }
 
     // Update combat system (death animations)
@@ -173,5 +192,39 @@ export class Game {
 
     // Render the scene
     this.renderer.render(this.scene);
+  }
+
+  private gameOver(): void {
+    this.isGameOver = true;
+    this.isRunning = false;
+    
+    // Show game over screen
+    this.hud.showGameOver(this.playerStats.level, this.currentWave);
+  }
+
+  private restart(): void {
+    // Reset player stats
+    this.playerStats = createDefaultStats();
+    
+    // Reset wave and progression
+    this.currentWave = 1;
+    this.progressionSystem.reset();
+    
+    // Reset player position
+    this.player.mesh.position.set(0, 0.8, 0);
+    
+    // Clear all enemies
+    this.enemies.forEach(enemy => this.scene.remove(enemy.mesh));
+    this.enemies = [];
+    
+    // Spawn new wave
+    this.spawnEnemyWave(3);
+    
+    // Reset game state
+    this.isGameOver = false;
+    this.hud.hideGameOver();
+    
+    // Restart game loop
+    this.start();
   }
 }

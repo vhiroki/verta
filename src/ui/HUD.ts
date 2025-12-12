@@ -16,6 +16,7 @@ export class HUD {
   private levelUpDisplay: HTMLElement;
   private levelUpStats: HTMLElement;
   private waveDisplay: HTMLElement;
+  private gameOverDisplay: HTMLElement;
 
   private levelUpTimeout: number | null = null;
 
@@ -33,6 +34,7 @@ export class HUD {
     this.levelUpDisplay = this.container.querySelector('.hud-level-up')!;
     this.levelUpStats = this.container.querySelector('.hud-level-up-stats')!;
     this.waveDisplay = this.container.querySelector('.hud-wave')!;
+    this.gameOverDisplay = this.container.querySelector('.hud-game-over')!;
   }
 
   private createHUDContainer(): HTMLElement {
@@ -74,6 +76,11 @@ export class HUD {
         <div class="hud-level-up">
           LEVEL UP!
           <div class="hud-level-up-stats"></div>
+        </div>
+        <div class="hud-game-over">
+          <div class="hud-game-over-title">GAME OVER</div>
+          <div class="hud-game-over-stats"></div>
+          <div class="hud-game-over-restart">Press SPACE to restart</div>
         </div>
       </div>
     `;
@@ -147,6 +154,22 @@ export class HUD {
     setTimeout(() => {
       healthBar.style.boxShadow = '';
     }, 150);
+  }
+
+  /**
+   * Show game over screen
+   */
+  public showGameOver(level: number, wave: number): void {
+    const statsEl = this.gameOverDisplay.querySelector('.hud-game-over-stats') as HTMLElement;
+    statsEl.innerHTML = `Reached Level ${level} | Wave ${wave}`;
+    this.gameOverDisplay.classList.add('visible');
+  }
+
+  /**
+   * Hide game over screen
+   */
+  public hideGameOver(): void {
+    this.gameOverDisplay.classList.remove('visible');
   }
 
   /**

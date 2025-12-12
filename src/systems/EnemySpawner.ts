@@ -16,8 +16,9 @@ export class EnemySpawner {
    * Spawn a wave of enemies
    * @param count Number of enemies to spawn
    * @param playerPosition Position to avoid spawning near
+   * @param wave Current wave number for enemy scaling
    */
-  public spawnWave(count: number, playerPosition: THREE.Vector3): Enemy[] {
+  public spawnWave(count: number, playerPosition: THREE.Vector3, wave: number = 1): Enemy[] {
     const enemies: Enemy[] = [];
     const minDistanceFromPlayer = 5;
 
@@ -36,7 +37,7 @@ export class EnemySpawner {
 
       // Alternate between chasers and wanderers
       const type: EnemyType = i % 2 === 0 ? 'chaser' : 'wanderer';
-      enemies.push(new Enemy(type, position));
+      enemies.push(new Enemy(type, position, wave));
     }
 
     return enemies;
@@ -45,7 +46,7 @@ export class EnemySpawner {
   /**
    * Spawn a single enemy of specified type
    */
-  public spawnEnemy(type: EnemyType, playerPosition: THREE.Vector3): Enemy {
+  public spawnEnemy(type: EnemyType, playerPosition: THREE.Vector3, wave: number = 1): Enemy {
     let position: THREE.Vector3;
     let attempts = 0;
     const minDistanceFromPlayer = 5;
@@ -58,7 +59,7 @@ export class EnemySpawner {
       attempts < 20
     );
 
-    return new Enemy(type, position);
+    return new Enemy(type, position, wave);
   }
 
   private getRandomPosition(): THREE.Vector3 {

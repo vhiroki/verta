@@ -142,4 +142,13 @@ export class ProgressionSystem {
   public getXPToNextLevel(): number {
     return this.xpToNextLevel;
   }
+
+  /**
+   * Reset progression for new game
+   */
+  public reset(): void {
+    this.currentXP = 0;
+    this.xpToNextLevel = xpForLevel(1);
+    this.currentWave = 1;
+  }
 }
