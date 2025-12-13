@@ -180,9 +180,14 @@ export class Game {
     if (this.enemies.length === 0) {
       this.currentWave++;
       this.progressionSystem.setWave(this.currentWave);
+      // Trigger arena transition effect
+      this.arena.triggerWaveTransition();
       // Spawn more enemies each wave
       this.spawnEnemyWave(3 + this.currentWave);
     }
+
+    // Update arena (transition effects)
+    this.arena.update(deltaTime);
 
     // Update HUD
     this.progressionSystem.updateHUD(this.playerStats);
