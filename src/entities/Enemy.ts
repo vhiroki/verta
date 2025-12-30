@@ -12,16 +12,11 @@ export class Enemy {
   
   private readonly speed: number;
   private readonly type: EnemyType;
-  private targetPosition: THREE.Vector3 | null = null;
   private edgeLines: THREE.LineSegments;
   
   // Health system
   public maxHealth: number;
   public currentHealth: number;
-  
-  // Wanderer behavior
-  private wanderTimer: number = 0;
-  private wanderDirection: THREE.Vector3 = new THREE.Vector3();
 
   constructor(type: EnemyType = 'chaser', position: THREE.Vector3, wave: number = 1) {
     this.type = type;
@@ -77,18 +72,15 @@ export class Enemy {
   public update(deltaTime: number, playerPosition: THREE.Vector3, bounds: ArenaBounds): void {
     if (!this.isAlive) return;
 
-    if (this.type === 'chaser') {
-      this.updateChaser(deltaTime, playerPosition, bounds);
-    } else {
-      this.updateWanderer(deltaTime, playerPosition, bounds);
-    }
+    // All enemies chase the player
+    this.chasePlayer(deltaTime, playerPosition, bounds);
 
     // Visual rotation for all enemies
     this.mesh.rotation.y += deltaTime * (this.type === 'chaser' ? 3 : 1);
     this.mesh.rotation.x += deltaTime * 0.5;
   }
 
-  private updateChaser(deltaTime: number, playerPosition: THREE.Vector3, bounds: ArenaBounds): void {
+  private chasePlayer(deltaTime: number, playerPosition: THREE.Vector3, bounds: ArenaBounds): void {
     // Move toward player
     const direction = new THREE.Vector3()
       .subVectors(playerPosition, this.mesh.position)
@@ -99,46 +91,9 @@ export class Enemy {
     this.clampToBounds(bounds);
   }
 
-  private updateWanderer(deltaTime: number, playerPosition: THREE.Vector3, bounds: ArenaBounds): void {
-    this.wanderTimer -= deltaTime;
-
-    // Change direction periodically or when reaching bounds
-    if (this.wanderTimer <= 0 || !this.isInBounds(bounds)) {
-      this.wanderTimer = 1 + Math.random() * 2;
-      
-      // Bias slightly toward player for some threat
-      const toPlayer = new THREE.Vector3()
-        .subVectors(playerPosition, this.mesh.position)
-        .setY(0)
-        .normalize();
-      
-      const randomDir = new THREE.Vector3(
-        Math.random() * 2 - 1,
-        0,
-        Math.random() * 2 - 1
-      ).normalize();
-
-      // 30% player bias, 70% random
-      this.wanderDirection.lerpVectors(randomDir, toPlayer, 0.3).normalize();
-    }
-
-    this.mesh.position.addScaledVector(this.wanderDirection, this.speed * deltaTime);
-    this.clampToBounds(bounds);
-  }
-
   private clampToBounds(bounds: ArenaBounds): void {
     this.mesh.position.x = Math.max(bounds.minX, Math.min(bounds.maxX, this.mesh.position.x));
     this.mesh.position.z = Math.max(bounds.minZ, Math.min(bounds.maxZ, this.mesh.position.z));
-  }
-
-  private isInBounds(bounds: ArenaBounds): boolean {
-    const margin = 0.5;
-    return (
-      this.mesh.position.x > bounds.minX + margin &&
-      this.mesh.position.x < bounds.maxX - margin &&
-      this.mesh.position.z > bounds.minZ + margin &&
-      this.mesh.position.z < bounds.maxZ - margin
-    );
   }
 
   public get position(): THREE.Vector3 {
