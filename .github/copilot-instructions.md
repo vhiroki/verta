@@ -119,8 +119,8 @@ export class Entity {
 | Element | Color | Usage |
 |---------|-------|-------|
 | Player | `0x00ffff` | Cyan, emissive glow |
-| Chaser Enemy | `0xff3366` | Red-pink, aggressive |
-| Wanderer Enemy | `0xff9900` | Orange, passive |
+| Seeker Enemy | `0xff3366` | Red-pink, aggressive |
+| Enforcer Enemy | `0xff9900` | Orange, deliberate |
 | Arena Edges | `0x00ffff` | Cyan glow |
 | Background | `0x0a0a0f` | Near-black |
 | Floor | `0x12121a` | Dark gray |
@@ -211,8 +211,8 @@ interface ArenaBounds {
 |----------|-------|----------|
 | Arena size | 24x24 | Arena.ts |
 | Player base speed | 8 | Player.ts |
-| Chaser speed | 3 | Enemy.ts |
-| Wanderer speed | 2 | Enemy.ts |
+| Seeker speed | 3 | Enemy.ts |
+| Enforcer speed | 2 | Enemy.ts |
 | Base pulse damage | 25 | AreaPulse.ts |
 | Base pulse cooldown | 1.0s | AreaPulse.ts |
 | Base XP per kill | 25 | ProgressionSystem.ts |

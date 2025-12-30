@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { ArenaBounds } from '../levels/Arena';
 
-export type EnemyType = 'chaser' | 'wanderer';
+export type EnemyType = 'seeker' | 'enforcer';
 
 /**
  * Enemy entity - hostile geometric shapes that pursue the player.
@@ -18,24 +18,24 @@ export class Enemy {
   public maxHealth: number;
   public currentHealth: number;
 
-  constructor(type: EnemyType = 'chaser', position: THREE.Vector3, wave: number = 1) {
+  constructor(type: EnemyType = 'seeker', position: THREE.Vector3, wave: number = 1) {
     this.type = type;
     
     // Different geometry and color based on type
     let geometry: THREE.BufferGeometry;
     let color: number;
     
-    if (type === 'chaser') {
+    if (type === 'seeker') {
       geometry = new THREE.TetrahedronGeometry(0.6);
-      color = 0xff3366; // Red-pink for aggressive chasers
+      color = 0xff3366; // Red-pink for aggressive seekers
       this.speed = 3;
-      // Chasers have lower health (1 hit at wave 1, scales up)
+      // Seekers have lower health (1 hit at wave 1, scales up)
       this.maxHealth = 20 + (wave - 1) * 15;
     } else {
       geometry = new THREE.BoxGeometry(0.7, 0.7, 0.7);
-      color = 0xff9900; // Orange for wanderers
+      color = 0xff9900; // Orange for enforcers
       this.speed = 2;
-      // Wanderers are tougher (2-3 hits at wave 1, scales up)
+      // Enforcers are tougher (2-3 hits at wave 1, scales up)
       this.maxHealth = 50 + (wave - 1) * 25;
     }
     this.currentHealth = this.maxHealth;
@@ -55,7 +55,7 @@ export class Enemy {
     // Add glowing edge lines for visibility
     const edgesGeometry = new THREE.EdgesGeometry(geometry);
     // Use darker edge color for better contrast with bloom
-    const edgeColor = type === 'chaser' ? 0x990022 : 0x994400;
+    const edgeColor = type === 'seeker' ? 0x990022 : 0x994400;
     const edgeMaterial = new THREE.LineBasicMaterial({
       color: edgeColor,
       linewidth: 2,
@@ -76,7 +76,7 @@ export class Enemy {
     this.chasePlayer(deltaTime, playerPosition, bounds);
 
     // Visual rotation for all enemies
-    this.mesh.rotation.y += deltaTime * (this.type === 'chaser' ? 3 : 1);
+    this.mesh.rotation.y += deltaTime * (this.type === 'seeker' ? 3 : 1);
     this.mesh.rotation.x += deltaTime * 0.5;
   }
 

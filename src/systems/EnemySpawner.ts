@@ -35,8 +35,8 @@ export class EnemySpawner {
         attempts < 20
       );
 
-      // Alternate between chasers and wanderers
-      const type: EnemyType = i % 2 === 0 ? 'chaser' : 'wanderer';
+      // Alternate between seekers and enforcers
+      const type: EnemyType = i % 2 === 0 ? 'seeker' : 'enforcer';
       enemies.push(new Enemy(type, position, wave));
     }
 

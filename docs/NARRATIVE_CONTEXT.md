@@ -28,14 +28,21 @@ The Enemies: Defensive Constructs
 
 Enemies are not monsters. They are defensive constructs—manifestations of VERTA’s self-correction.
 
-They behave like system functions:
-	•	Validators that check and punish invalid movement patterns
-	•	Nullifiers that suppress upgrades or drain resources
-	•	Sentinels that guard transitions and force skill checks
-	•	Reducers that compress space and reduce safe movement
-	•	Mirrors that reflect or copy player behaviors
+Current construct types:
 
-As progression continues, VERTA deploys increasingly complex and efficient constructs. The system learns.
+- **Seekers**: Fast, fragile constructs. They rapidly close distance to the Anomaly, testing its ability to evade. Low integrity, high aggression.
+
+- **Enforcers**: Slower, resilient constructs. They move deliberately toward the Anomaly with greater structural integrity. Harder to neutralize, but less immediately threatening.
+
+All constructs pursue the Anomaly directly—VERTA does not hesitate. As waves progress, constructs grow stronger (increased integrity scaling per wave).
+
+Future construct concepts (not yet implemented):
+- Nullifiers that suppress upgrades or drain resources
+- Sentinels that guard transitions and force skill checks
+- Reducers that compress space and limit safe movement
+- Mirrors that reflect or copy player behaviors
+
+As progression continues, VERTA should deploy increasingly complex and efficient constructs. The system learns.
 
 ⸻
 
